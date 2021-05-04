@@ -12,8 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using AutoMapper;
 using NewsweatherAPI.Data;
 using NewsweatherAPI.Services.CityService;
+using NewsweatherAPI.Services.WeatherService;
 
 namespace NewsweatherAPI
 {
@@ -37,8 +39,9 @@ namespace NewsweatherAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NewsweatherAPI", Version = "v1" });
             });
-            
+            services.AddAutoMapper(typeof(Startup));
             services.AddScoped<ICityService, CityService>();
+            services.AddScoped<IWeatherService, WeatherService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

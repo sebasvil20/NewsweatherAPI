@@ -2,8 +2,9 @@ namespace NewsweatherAPI.Models
 {
     public class City
     {
-        public int id { get; set; } = 1;
-        public string city_name { get; set; } = "Ciudad nombre";
-        public string city_population { get; set; } = "1";
+        public int Id { get; set; }
+        public string City_Name { get; set; }
+        public string City_Population { get; set; }
+        public Weather Weather { get; set; }
     }
 }
