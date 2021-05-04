@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NewsweatherAPI.Data;
@@ -18,6 +19,15 @@ namespace NewsweatherAPI.Services.CityService
             var ServiceResponse = new ServiceResponse<List<City>>();
             var dbCities = await _context.City.ToListAsync();
             ServiceResponse.Data = dbCities;
+            return ServiceResponse;
+        }
+
+        public async Task<ServiceResponse<City>> GetCityById(string name){
+            
+            var ServiceResponse = new ServiceResponse<City>();
+            var city_name_prop = Regex.Replace(name.Normalize(System.Text.NormalizationForm.FormD), @"[^a-zA-z0-9 ]+", "");
+            var dbCity = await _context.City.FirstOrDefaultAsync(city => city.city_name == city_name_prop);
+            ServiceResponse.Data = dbCity;
             return ServiceResponse;
         }
 

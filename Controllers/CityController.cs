@@ -18,11 +18,15 @@ namespace NewsweatherAPI.Controllers
             _cityService = cityService;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllCities")]
         public async Task<ActionResult<ServiceResponse<List<City>>>> Get(){
             return Ok(await _cityService.GetAllCities());
         }
 
-
+        
+        [HttpGet("{name}")]
+        public async Task<ActionResult<ServiceResponse<City>>> GetCityById(string name){
+            return Ok(await _cityService.GetCityById(name));
+        }
     }
 }
