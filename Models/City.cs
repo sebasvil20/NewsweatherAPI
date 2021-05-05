@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace NewsweatherAPI.Models
 {
     public class City
@@ -6,5 +8,6 @@ namespace NewsweatherAPI.Models
         public string City_Name { get; set; }
         public string City_Population { get; set; }
         public Weather Weather { get; set; }
+        public List<News> News {get; set;}
     }
 }
