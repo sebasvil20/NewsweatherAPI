@@ -26,6 +26,8 @@ namespace NewsweatherAPI.Services.CityService
         public async Task<ServiceResponse<List<GetCityDto>>> GetAllCities()
         {
             ServiceResponse<List<GetCityDto>> serviceResponse = new ServiceResponse<List<GetCityDto>>();
+
+            //List all the cities stored in the database including weather and news object.
             List<City> dbCities = await _context.Cities.Include(c => c.Weather).Include(c => c.News).ToListAsync();
             serviceResponse.Data = (dbCities.Select(c => _mapper.Map<GetCityDto>(c))).ToList();
             return serviceResponse;
@@ -34,9 +36,15 @@ namespace NewsweatherAPI.Services.CityService
         public async Task<ServiceResponse<GetCityDto>> GetCityById(string name)
         {
             ServiceResponse<GetCityDto> ServiceResponse = new ServiceResponse<GetCityDto>();
-            var city_name_prop = Regex.Replace(name.Normalize(System.Text.NormalizationForm.FormD), @"[^a-zA-z0-9 ]+", "");
+            var city_name_prop = Regex
+                        .Replace(name.Normalize(System.Text.NormalizationForm.FormD), @"[^a-zA-z0-9 ]+", "");
             city_name_prop = (CultureInfo.InvariantCulture.TextInfo.ToTitleCase(city_name_prop));
-            var dbCity = await _context.Cities.Include(c => c.Weather).Include(c => c.News).FirstOrDefaultAsync(city => city.City_Name == city_name_prop);
+            var dbCity = await _context.Cities
+                        .Include(c => c.Weather)
+                        .Include(c => c.News)
+                        .FirstOrDefaultAsync(city => city.City_Name == city_name_prop);
+            //After getting the city, we need to save the city to the search history, so we create a new object of type searchHistory 
+            //with the id of the city searched, that will become an item in the searchHistory database
             try{
                 SearchHistory newHistory = new SearchHistory{
                     CityId = dbCity.Id

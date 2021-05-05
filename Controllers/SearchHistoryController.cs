@@ -20,6 +20,9 @@ namespace NewsweatherAPI.Controllers
         }
         
         
+        //Method to list all histories
+
+        //EndPoint: /SearchHistory/GetHistory
         [HttpGet("GetHistory")]
         public async Task<ActionResult<ServiceResponse<List<GetSearchHistoryDto>>>> Get(){
             return Ok(await _historyService.GetHistory());

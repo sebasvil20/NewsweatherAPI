@@ -31,15 +31,22 @@ namespace NewsweatherAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Register the database context, with the connection string DefaultConnection
+            //The connection string is in appsettins.json
             services.AddDbContext<DataContext>(options => 
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NewsweatherAPI", Version = "v1" });
             });
+
+            //Register the autoMapper like documentation says
             services.AddAutoMapper(typeof(Startup));
+            
+            //Register all services that I've created
             services.AddScoped<ICityService, CityService>();
             services.AddScoped<ISearchHistoryService, SearchHistoryService>();
         }
