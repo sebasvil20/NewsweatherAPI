@@ -21,6 +21,7 @@ namespace NewsweatherAPI.Services.CityService
             _context = context;
         }
 
+
         public async Task<ServiceResponse<List<GetCityDto>>> GetAllCities()
         {
             ServiceResponse<List<GetCityDto>> serviceResponse = new ServiceResponse<List<GetCityDto>>();

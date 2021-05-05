@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsweatherAPI.Data;
 
 namespace NewsweatherAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210505134016_FixingHistorySchema")]
+    partial class FixingHistorySchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,6 +89,9 @@ namespace NewsweatherAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("SearchHistory");
@@ -133,11 +138,9 @@ namespace NewsweatherAPI.Migrations
 
             modelBuilder.Entity("NewsweatherAPI.Models.City", b =>
                 {
-                    b.HasOne("NewsweatherAPI.Models.SearchHistory", "SearchHistory")
+                    b.HasOne("NewsweatherAPI.Models.SearchHistory", null)
                         .WithMany("Cities")
                         .HasForeignKey("SearchHistoryId");
-
-                    b.Navigation("SearchHistory");
                 });
 
             modelBuilder.Entity("NewsweatherAPI.Models.News", b =>

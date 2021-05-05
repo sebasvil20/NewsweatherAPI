@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 using AutoMapper;
 using NewsweatherAPI.Data;
 using NewsweatherAPI.Services.CityService;
+using NewsweatherAPI.Services.SearchHistoryService;
 
 namespace NewsweatherAPI
 {
@@ -40,6 +41,7 @@ namespace NewsweatherAPI
             });
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<ICityService, CityService>();
+            services.AddScoped<ISearchHistoryService, SearchHistoryService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

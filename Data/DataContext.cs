@@ -13,6 +13,7 @@ namespace NewsweatherAPI.Data
         public DbSet<City> Cities { get; set; }
         public DbSet<Weather> Weather { get; set; }
         public DbSet<News> News { get; set; }
+        public DbSet<SearchHistory> SearchHistory { get; set; }
         
     }
     
