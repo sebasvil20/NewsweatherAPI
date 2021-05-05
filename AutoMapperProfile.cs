@@ -10,7 +10,6 @@ namespace dotnet_rpg
         public AutoMapperProfile()
         {
             CreateMap<City, GetCityDto>();
-            CreateMap<AddWeatherDto, Weather>();
             CreateMap<Weather, GetWeatherDto>();
         }
     }
