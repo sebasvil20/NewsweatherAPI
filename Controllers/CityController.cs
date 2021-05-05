@@ -8,7 +8,7 @@ using NewsweatherAPI.Services.CityService;
 namespace NewsweatherAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class CityController : ControllerBase
     {
         private readonly ICityService _cityService;

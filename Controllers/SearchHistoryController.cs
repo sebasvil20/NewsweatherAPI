@@ -8,7 +8,7 @@ using NewsweatherAPI.Services.SearchHistoryService;
 namespace NewsweatherAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class SearchHistoryController : ControllerBase
     {
         private readonly ISearchHistoryService _historyService;
