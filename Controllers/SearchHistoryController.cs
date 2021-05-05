@@ -11,14 +11,12 @@ namespace NewsweatherAPI.Controllers
     [Route("[controller]")]
     public class SearchHistoryController : ControllerBase
     {
-        
         private readonly ISearchHistoryService _historyService;
 
         public SearchHistoryController(ISearchHistoryService historyService)
         {
             _historyService = historyService;
         }
-        
         
         //Method to list all histories
 

@@ -11,7 +11,6 @@ namespace NewsweatherAPI.Controllers
     [Route("[controller]")]
     public class CityController : ControllerBase
     {
-
         private readonly ICityService _cityService;
 
         //Constructor to initilize the Controller with cityService object
@@ -28,7 +27,6 @@ namespace NewsweatherAPI.Controllers
         public async Task<ActionResult<ServiceResponse<List<GetCityDto>>>> Get(){
             return Ok(await _cityService.GetAllCities());
         }
-
 
         //Method to search for certain city, it receives the name of the city
 

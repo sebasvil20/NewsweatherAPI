@@ -22,14 +22,19 @@ namespace NewsweatherAPI.Services.CityService
             _context = context;
         }
 
-
         public async Task<ServiceResponse<List<GetCityDto>>> GetAllCities()
         {
             ServiceResponse<List<GetCityDto>> serviceResponse = new ServiceResponse<List<GetCityDto>>();
-
+            try{
             //List all the cities stored in the database including weather and news object.
-            List<City> dbCities = await _context.Cities.Include(c => c.Weather).Include(c => c.News).ToListAsync();
-            serviceResponse.Data = (dbCities.Select(c => _mapper.Map<GetCityDto>(c))).ToList();
+                List<City> dbCities = await _context.Cities.Include(c => c.Weather).Include(c => c.News).ToListAsync();
+                serviceResponse.Data = (dbCities.Select(c => _mapper.Map<GetCityDto>(c))).ToList();
+            }
+            catch(Exception ex){
+                serviceResponse.Data = null;
+                serviceResponse.Sucess = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
 
@@ -58,6 +63,5 @@ namespace NewsweatherAPI.Services.CityService
             ServiceResponse.Data = _mapper.Map<GetCityDto>(dbCity);
             return ServiceResponse;
         }
-
     }
 }
