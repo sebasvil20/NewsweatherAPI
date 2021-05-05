@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -36,6 +37,16 @@ namespace NewsweatherAPI.Services.CityService
             var city_name_prop = Regex.Replace(name.Normalize(System.Text.NormalizationForm.FormD), @"[^a-zA-z0-9 ]+", "");
             city_name_prop = (CultureInfo.InvariantCulture.TextInfo.ToTitleCase(city_name_prop));
             var dbCity = await _context.Cities.Include(c => c.Weather).Include(c => c.News).FirstOrDefaultAsync(city => city.City_Name == city_name_prop);
+            try{
+                SearchHistory newHistory = new SearchHistory{
+                    CityId = dbCity.Id
+                };
+                _context.SearchHistory.Add(newHistory);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception ex){
+                ServiceResponse.Message = ex.Message;
+            }
             ServiceResponse.Data = _mapper.Map<GetCityDto>(dbCity);
             return ServiceResponse;
         }

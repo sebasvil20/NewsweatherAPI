@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsweatherAPI.Data;
 
 namespace NewsweatherAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210505140940_FixingHistorySchema5")]
+    partial class FixingHistorySchema5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,7 +34,12 @@ namespace NewsweatherAPI.Migrations
                     b.Property<string>("City_Population")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SearchHistoryId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SearchHistoryId");
 
                     b.ToTable("Cities");
                 });
@@ -82,15 +89,10 @@ namespace NewsweatherAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CityId")
-                        .HasColumnType("int");
-
                     b.Property<string>("HistoryName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
 
                     b.ToTable("SearchHistory");
                 });
@@ -134,6 +136,15 @@ namespace NewsweatherAPI.Migrations
                     b.ToTable("Weather");
                 });
 
+            modelBuilder.Entity("NewsweatherAPI.Models.City", b =>
+                {
+                    b.HasOne("NewsweatherAPI.Models.SearchHistory", "SearchHistory")
+                        .WithMany("Cities")
+                        .HasForeignKey("SearchHistoryId");
+
+                    b.Navigation("SearchHistory");
+                });
+
             modelBuilder.Entity("NewsweatherAPI.Models.News", b =>
                 {
                     b.HasOne("NewsweatherAPI.Models.City", "City")
@@ -141,15 +152,6 @@ namespace NewsweatherAPI.Migrations
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("City");
-                });
-
-            modelBuilder.Entity("NewsweatherAPI.Models.SearchHistory", b =>
-                {
-                    b.HasOne("NewsweatherAPI.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
 
                     b.Navigation("City");
                 });
@@ -170,6 +172,11 @@ namespace NewsweatherAPI.Migrations
                     b.Navigation("News");
 
                     b.Navigation("Weather");
+                });
+
+            modelBuilder.Entity("NewsweatherAPI.Models.SearchHistory", b =>
+                {
+                    b.Navigation("Cities");
                 });
 #pragma warning restore 612, 618
         }
