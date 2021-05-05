@@ -51,11 +51,15 @@ namespace NewsweatherAPI.Services.CityService
             //After getting the city, we need to save the city to the search history, so we create a new object of type searchHistory 
             //with the id of the city searched, that will become an item in the searchHistory database
             try{
-                SearchHistory newHistory = new SearchHistory{
-                    CityId = dbCity.Id
-                };
-                _context.SearchHistory.Add(newHistory);
-                await _context.SaveChangesAsync();
+                List<SearchHistory> dbHistory = await _context.SearchHistory.Include(c => c.City.Weather).Include(c => c.City.News).ToListAsync();
+                dbHistory.Reverse();
+                if(dbHistory[0].CityId != dbCity.Id){
+                    SearchHistory newHistory = new SearchHistory{
+                        CityId = dbCity.Id
+                    };
+                    _context.SearchHistory.Add(newHistory);
+                    await _context.SaveChangesAsync();
+                }
             }
             catch(Exception ex){
                 ServiceResponse.Message = ex.Message;
