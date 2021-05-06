@@ -41,16 +41,16 @@ namespace NewsweatherAPI.Services.CityService
         public async Task<ServiceResponse<GetCityDto>> GetCityById(string name)
         {
             ServiceResponse<GetCityDto> ServiceResponse = new ServiceResponse<GetCityDto>();
-            var city_name_prop = Regex
-                        .Replace(name.Normalize(System.Text.NormalizationForm.FormD), @"[^a-zA-z0-9 ]+", "");
-            city_name_prop = (CultureInfo.InvariantCulture.TextInfo.ToTitleCase(city_name_prop));
-            var dbCity = await _context.Cities
-                        .Include(c => c.Weather)
-                        .Include(c => c.News)
-                        .FirstOrDefaultAsync(city => city.City_Name == city_name_prop);
             //After getting the city, we need to save the city to the search history, so we create a new object of type searchHistory 
             //with the id of the city searched, that will become an item in the searchHistory database
             try{
+                var city_name_prop = Regex
+                            .Replace(name.Normalize(System.Text.NormalizationForm.FormD), @"[^a-zA-z0-9 ]+", "");
+                city_name_prop = (CultureInfo.InvariantCulture.TextInfo.ToTitleCase(city_name_prop));
+                var dbCity = await _context.Cities
+                            .Include(c => c.Weather)
+                            .Include(c => c.News)
+                            .FirstOrDefaultAsync(city => city.City_Name == city_name_prop);
                 List<SearchHistory> dbHistory = await _context.SearchHistory.Include(c => c.City.Weather).Include(c => c.City.News).ToListAsync();
                 dbHistory.Reverse();
                 if(dbHistory[0].CityId != dbCity.Id){
@@ -60,11 +60,12 @@ namespace NewsweatherAPI.Services.CityService
                     _context.SearchHistory.Add(newHistory);
                     await _context.SaveChangesAsync();
                 }
+                ServiceResponse.Data = _mapper.Map<GetCityDto>(dbCity);
             }
             catch(Exception ex){
+                ServiceResponse.Sucess = false;
                 ServiceResponse.Message = ex.Message;
             }
-            ServiceResponse.Data = _mapper.Map<GetCityDto>(dbCity);
             return ServiceResponse;
         }
     }

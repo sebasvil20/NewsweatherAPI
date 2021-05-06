@@ -31,6 +31,12 @@ namespace NewsweatherAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        }));
             //Register the database context, with the connection string DefaultConnection
             //The connection string is in appsettins.json
             services.AddDbContext<DataContext>(options => 
@@ -60,6 +66,10 @@ namespace NewsweatherAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NewsweatherAPI v1"));
             }
+
+            
+            // Enable Cors
+            app.UseCors("MyPolicy");
 
             app.UseHttpsRedirection();
 
