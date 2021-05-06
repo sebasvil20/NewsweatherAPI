@@ -24,8 +24,8 @@ namespace NewsweatherAPI.Services.SearchHistoryService
         {
             ServiceResponse<List<GetSearchHistoryDto>> serviceResponse = new ServiceResponse<List<GetSearchHistoryDto>>();
             try{
-                List<SearchHistory> dbHistory = await _context.SearchHistory.Include(c => c.City.Weather).Include(c => c.City.News).ToListAsync();
-                serviceResponse.Data = (dbHistory.Select(c => _mapper.Map<GetSearchHistoryDto>(c))).ToList();
+                List<SearchHistory> dbHistory = await _context.SearchHistory.Include(h => h.City.Weather).Include(h => h.City.News).ToListAsync();
+                serviceResponse.Data = (dbHistory.Select(h => _mapper.Map<GetSearchHistoryDto>(h))).ToList();
                 serviceResponse.Data.Reverse();
             }
             catch(Exception ex){
