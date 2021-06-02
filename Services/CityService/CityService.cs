@@ -46,12 +46,16 @@ namespace NewsweatherAPI.Services.CityService
             try{
                 var city_name_prop = Regex
                             .Replace(name.Normalize(System.Text.NormalizationForm.FormD), @"[^a-zA-z0-9 ]+", "");
-                city_name_prop = (CultureInfo.InvariantCulture.TextInfo.ToTitleCase(city_name_prop));
+                city_name_prop = (CultureInfo.InvariantCulture.TextInfo
+                            .ToTitleCase(city_name_prop));
                 var dbCity = await _context.Cities
                             .Include(c => c.Weather)
                             .Include(c => c.News)
                             .FirstOrDefaultAsync(city => city.City_Name == city_name_prop);
-                List<SearchHistory> dbHistory = await _context.SearchHistory.Include(c => c.City.Weather).Include(c => c.City.News).ToListAsync();
+                List<SearchHistory> dbHistory = await _context.SearchHistory
+                            .Include(c => c.City.Weather)
+                            .Include(c => c.City.News)
+                            .ToListAsync();
                 dbHistory.Reverse();
                 if(dbHistory[0].CityId != dbCity.Id){
                     SearchHistory newHistory = new SearchHistory{
